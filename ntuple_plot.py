@@ -1,8 +1,6 @@
 import json, math
 import ROOT, sys, os, re, string
 from ROOT import *
-import numpy as n
-# load libraries
 
 ROOT.gROOT.SetBatch(ROOT.kTRUE) # do not print outputs of draw or load graphics
 ROOT.gStyle.SetOptStat(0)       # do not draw stat box
@@ -125,8 +123,6 @@ def distplot(filename1, treeNum, varname, nbins, low, high, cuts, logy, xlabel, 
 	hNum1 = TH1F("hNum1","hNum1",nbins,low,high) #define histogram
 	tNum1.Draw(varname+" >> hNum1",cuts,"goff") #draw TTree into histogram
 
-	hNumM = TH1F("hNumM","hNumM",20,-10.*markcut,10.*markcut) #for drawing vertical line somewhere, doesnt get used in markcut is 0.
-
 	hNum1.Sumw2() #for proper error handling
 	hNum1.Scale(1./hNum1.Integral()) #scale to unity
 
@@ -169,7 +165,6 @@ filename1 = "/home/drankin/TauID/GenNtuple_GluGluHToTauTau_M125_13TeV_powheg_pyt
 filename2 = "/home/drankin/TauID/GenNtuple_ZprimeToTauTau_M-3000_TuneCP5_13TeV-pythia8-tauola.root"
 filename3 = "/home/drankin/TauID/GenNtuple_QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8.root"
 filename4 = "/home/drankin/TauID/GenNtuple_QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8.root"
-filename5 = "/home/pharris/GenNtuple.root"
 
 """
 prefix1 = "_GluGluHToTauTau"
@@ -202,81 +197,3 @@ for var in varlist:
 			 var[1]+" Comparison Endcap"+prename2,"(abs(genjetid)<6 || abs(genjetid)==21)"+endcut,"Q/G Jet",
 			 "abs(genjetid)==15"+endcut,"Tau","(abs(genjetid)>=6 && abs(genjetid)!=21 && abs(genjetid)!=15)"+endcut,"Other")
 """
-
-# ---- Dummy Functions ----
-
-def list_particles(filename, treeNum, eventNum):
-
-    f1 = TFile(filename) #open file
-    tNum = f1.Get(treeNum) #get TTree
-
-    i = 0
-    for event in tNum:
-        if (i >= eventNum): break
-        for j in range(len(event.genjetid)):
-            print('Event '+str(i)+' jet '+str(j)+' contains')
-            for k in range(len(event.genindex)):
-                if (event.genindex[k] is j): print '\t ID '+str(event.genid[k])
-        i += 1
-
-def list_pt(filename, treeNum, eventNum, cutoff=0):
-	
-	f1 = TFile(filename) 
-	tNum = f1.Get(treeNum)
-
-	i = 0
-	for event in tNum:
-		if (i >= eventNum): break
-		for j in range(len(event.genjetid)):
-			if (abs(event.genjetid[j]) == 15): #only examine tau jets
-				print('Event '+str(i)+' jet '+str(j)+' PT '+str(event.genjetpt[j]))
-				for k in range(len(event.genindex)):
-					if (event.genindex[k] == j and event.genpt[k] > cutoff):
-						print('\t PT '+str(event.genpt[k])+' ID '+str(event.genid[k]))
-		i += 1
-
-def list_parent(filename, treeNum, eventNum):
-	
-	f1 = TFile(filename)
-	tNum = f1.Get(treeNum)
-
-	i = 0
-	for event in tNum:
-		if (i >= eventNum): break
-		for j in range(len(event.genjetid)):
-			if (abs(event.genjetid[j]) == 15):
-				print('Event '+str(i)+' jet '+str(j)+' contains')
-				for k in range(len(event.genindex)):
-					if (event.genindex[k] == j):
-						print('\t PartID '+str(event.genpartid[k])+' Parent '+str(event.genparent[k])+' Status '+str(event.genstatus[k]))
-						print('\t Particle '+str(event.genid[k])+'\n')
-		i += 1
-
-def find_parent(filename, treeNum, eventNum):
-	
-	f1 = TFile(filename)
-	tNum = f1.Get(treeNum)
-
-	i = 0
-	for event in tNum:
-		if (i >= eventNum): break
-		for j in range(len(event.genjetid)): 
-			if (abs(event.genjetid[j]) == 15): #only examine tau jets
-				print('Event '+str(i)+' jet '+str(j)+' contains') 
-				for k in range(len(event.genindex)): 
-					if (event.genindex[k] == j): 
-						if (event.genstatus[k] == 1):
-							index = k
-							while ((event.genparent[index] != -2) and (abs(event.genid[index]) != 15)):
-								index = event.genparent[index]
-							if (abs(event.genid[index]) == 15):
-								print('\t'+str(event.genid[index])+' decays to '+str(event.genid[k]))
-		i += 1
-
-#list_particles(filename5, "GenNtupler/gentree", 5)
-#list_pt(filename5, "GenNtupler/gentree", 5)
-#list_parent(filename5, "GenNtupler/gentree", 100)
-find_parent(filename5, "GenNtupler/gentree", 5)
-
-
-
