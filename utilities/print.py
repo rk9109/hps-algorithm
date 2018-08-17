@@ -6,8 +6,12 @@ filename1 = "/data/t3home000/rinik/GenNtuple_GluGluHToTauTau_M125_13TeV_powheg_p
 filename2 = "/data/t3home000/rinik/GenNtuple_ZprimeToTauTau_M-3000_TuneCP5_13TeV-pythia8-tauola.root"
 filename3 = "/data/t3home000/rinik/GenNtuple_QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8.root"
 filename4 = "/data/t3home000/rinik/GenNtuple_QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8.root"
-filename5 = "/mnt/hadoop/scratch/drankin/TauID/GenNtuple_parentage_GluGluHToTauTau_M125_13TeV_powheg_pythia8.root"
+filename5 = "/mnt/hadoop/scratch/drankin/TauID/GenNtuple_parentage_GluGluHToTauTau_M125_13TeV_powheg_pythia8.root" 
 filename6 = "/mnt/hadoop/scratch/drankin/TauID/GenNtuple_parentage_ZprimeToTauTau_M-3000_TuneCP5_13TeV-pythia8-tauola.root"
+filename7 = "/mnt/hadoop/scratch/drankin/TauID/GenNtuple_parentage_QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8.root"   
+filename8 = "/mnt/hadoop/scratch/drankin/TauID/GenNtuple_parentage_QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8.root"
+filename9 = "/data/t3home000/rinik/GenNtuple_parentage_QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8.root"
+filename10 = "/data/t3hom3000/rinik/GenNtuple_parentage_QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8.root"
 
 # ---- Print Functions ----
 
@@ -77,7 +81,7 @@ def find_parent(filename, treeNum, totalNum):
 		for j in range(len(event.genjetid)): 
 			claim_tau = False; actual_tau = False
 			
-			if (abs(event.genjetid[j]) == 15): #only examine tau jets
+			if (abs(event.genjetid[j]) >= 4): #only examine tau jets
 				claim_tau = True	
 			#print('Event '+str(eventNum)+' jet '+str(j)+' contains') 	
 			
@@ -106,7 +110,7 @@ def find_parent(filename, treeNum, totalNum):
 
 #list_particles(filename1, "GenNtupler/gentree", 5)
 #list_taus(filename1, "GenNtupler/gentree", 5)
-#list_parent(filename5, "GenNtupler/gentree", 10)
-find_parent(filename5, "GenNtupler/gentree", 1000)
+#list_parent(filename6, "GenNtupler/gentree", 10)
+find_parent(filename8, "GenNtupler/gentree", 10000)
 
 

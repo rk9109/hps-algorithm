@@ -88,7 +88,6 @@ def gen_candidates(event, jet_num, hadron_cut, ep_cut):
 		   hadron_cut | Pt cutoff for hadrons
 		   ep_cut     | Pt cutoff for electrons/photons
 	"""
-
 	hadron_4v = [] # hadron candidate 4vec
 	ep_4v = []     # electron/photon candidate 4vec
 
